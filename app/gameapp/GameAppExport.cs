@@ -143,7 +143,7 @@ internal static class GameExport
     private static void SaveBookmark(NSUrl url)
     {
         var data = url.CreateBookmarkData(NSUrlBookmarkCreationOptions.MinimalBookmark, null, null, out NSError error);
-        if (data == null) throw new InvalidOperationException("the place of the game files could not be kept: " + error?.LocalizedDescription);
+        if (data == null) throw new InvalidOperationException("无法保存游戏文件的位置：" + error?.LocalizedDescription);
         Directory.CreateDirectory(Path.GetDirectoryName(RomfsBookmarkPath));
         File.WriteAllBytes(RomfsBookmarkPath, data.ToArray());
     }
@@ -197,15 +197,15 @@ internal static class GameExport
 
         string Need(string path, string what)
         {
-            if (!File.Exists(path) && !Directory.Exists(path)) throw new InvalidOperationException($"{what} is missing ({path}): build the game again, then export it");
+            if (!File.Exists(path) && !Directory.Exists(path)) throw new InvalidOperationException($"{what} 缺失（{path}）：请重新构建游戏，再导出");
             return path;
         }
-        var framework = Need(Path.Combine(documents, "DmGameProbe.framework"), "the built framework");
-        var flat = Need(Path.Combine(documents, "extract", "flat"), "the rewritten modules");
-        var romfs = Need(Path.Combine(documents, "extract", "RomFS.img"), "the game's files (RomFS.img)");
+        var framework = Need(Path.Combine(documents, "DmGameProbe.framework"), "已构建的框架");
+        var flat = Need(Path.Combine(documents, "extract", "flat"), "重写后的模块");
+        var romfs = Need(Path.Combine(documents, "extract", "RomFS.img"), "游戏文件（RomFS.img）");
         romfsPath = romfs;
-        var pack = Need(Path.Combine(documents, "shaders", titleId), "the game's shader library");
-        var profile = Need(Path.Combine(documents, "profile.tsv"), "the game's profile");
+        var pack = Need(Path.Combine(documents, "shaders", titleId), "游戏的着色器库");
+        var profile = Need(Path.Combine(documents, "profile.tsv"), "游戏的配置");
 
         // The app itself, minus its signature (the installer writes a new one) and its Info.plist (replaced below).
         AddTree(bundle, app, rel => rel.StartsWith("_CodeSignature/") || rel == "Info.plist" || rel.StartsWith(Folder + "/"));
@@ -294,7 +294,7 @@ internal static class GameExport
         Set("CFBundleSupportedPlatforms", app?["CFBundleSupportedPlatforms"]);
         Set("UIDeviceFamily", app?["UIDeviceFamily"]);
         var data = NSPropertyListSerialization.DataWithPropertyList(dict, NSPropertyListFormat.Xml, NSPropertyListWriteOptions.Immutable, out NSError error);
-        if (data == null) throw new InvalidOperationException("the framework's Info.plist could not be written: " + error?.LocalizedDescription);
+        if (data == null) throw new InvalidOperationException("无法写入框架的 Info.plist：" + error?.LocalizedDescription);
         return data.ToArray();
     }
 
@@ -313,7 +313,7 @@ internal static class GameExport
             dict.Remove(new NSString("CFBundleIcons~ipad"));
         }
         var data = NSPropertyListSerialization.DataWithPropertyList(dict, NSPropertyListFormat.Xml, NSPropertyListWriteOptions.Immutable, out NSError error);
-        if (data == null) throw new InvalidOperationException("the exported Info.plist could not be written: " + error?.LocalizedDescription);
+        if (data == null) throw new InvalidOperationException("无法写入导出的 Info.plist：" + error?.LocalizedDescription);
         return data.ToArray();
     }
 
@@ -328,7 +328,7 @@ internal static class GameExport
         long free = new DriveInfo(documents).AvailableFreeSpace;
         long need = total + (256L << 20);
         if (free > 0 && free < need)
-            throw new InvalidOperationException($"not enough space: the .ipa needs about {GameAppUi.SizeText(need)}, {GameAppUi.SizeText(free)} is free");
+            throw new InvalidOperationException($"空间不足：.ipa 需要约 {GameAppUi.SizeText(need)}，可用 {GameAppUi.SizeText(free)}");
         log($"export: {entries.Count} files, {GameAppUi.SizeText(total)} -> Exports/{appName}.ipa");
 
         var path = Path.Combine(outDir, appName + ".ipa");
@@ -396,7 +396,7 @@ internal static class GameExport
         if (File.Exists(dest)) File.Delete(dest);
         File.Move(part, dest);
         log($"export: the game files beside it, Exports/{Path.GetFileName(Path.GetDirectoryName(dest))}/{Path.GetFileName(dest)} ({GameAppUi.SizeText(new FileInfo(dest).Length)}, "
-            + (cloned ? "a clone: no extra space" : $"copied in {(DateTime.Now - started).TotalSeconds:0}s") + ")");
+            + (cloned ? "克隆：不占额外空间" : $"copied in {(DateTime.Now - started).TotalSeconds:0}s") + ")");
     }
 
     /// The Unix mode an installer needs to see in the .ipa: executables keep their x bit (a main binary without it
