@@ -55,7 +55,7 @@ public static class Cloud
         if (p.IndexOf("OneDrive", StringComparison.OrdinalIgnoreCase) >= 0 || p.IndexOf("com.microsoft.skydrive", StringComparison.OrdinalIgnoreCase) >= 0) return "OneDrive";
         if (p.IndexOf("Dropbox", StringComparison.OrdinalIgnoreCase) >= 0) return "Dropbox";
         if (p.IndexOf("FileProvider", StringComparison.OrdinalIgnoreCase) >= 0 || p.IndexOf("File Provider Storage", StringComparison.OrdinalIgnoreCase) >= 0) return "Files";
-        return "On this " + GameAppUi.DeviceName;
+        return "在这台 " + GameAppUi.DeviceName;
     }
 
     /// The source's name in the library: "<provider> · <folder>".
@@ -159,7 +159,7 @@ public static class Cloud
     public static string Where(CloudFile f, IEnumerable<CloudSource> sources)
     {
         var s = (sources ?? Enumerable.Empty<CloudSource>()).FirstOrDefault(x => x.Id == f.SourceId);
-        var name = s == null ? "the cloud" : s.Kind == CloudKind.Nas ? "NAS" : ProviderName(s.Location);
-        return "In " + name + (f.Size > 0 ? " · " + GameAppUi.SizeText(f.Size) : "");
+        var name = s == null ? "云端" : s.Kind == CloudKind.Nas ? "NAS" : ProviderName(s.Location);
+        return "在 " + name + (f.Size > 0 ? " · " + GameAppUi.SizeText(f.Size) : "");
     }
 }
