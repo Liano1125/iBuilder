@@ -82,7 +82,7 @@ public static class BuildQueue
         bool any = false;
         foreach (var i in state.Items.Where(i => i.State == Running && i.Game != continuing).ToList())
         {
-            Replace(state, i.Game, Failed, "the app was closed during this build");
+            Replace(state, i.Game, Failed, "构建期间应用被关闭");
             any = true;
         }
         if (any) state.AutoStart = false;
@@ -113,6 +113,6 @@ public static class BuildHeat
     /// The subtle note on the build screen: nothing while nominal.
     public static string Chip(int state) => state switch
     {
-        1 => "warm", 2 => "hot: pausing new work", >= 3 => "very hot: pausing new work", _ => null,
+        1 => "发热", 2 => "很热：暂停新任务", >= 3 => "非常热：暂停新任务", _ => null,
     };
 }

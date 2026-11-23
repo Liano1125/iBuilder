@@ -36,7 +36,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>dev.nxpocket.ibuilder.romfs</string>
 			<key>UTTypeDescription</key>
-			<string>Switch game files</string>
+			<string>Switch 游戏文件</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -53,7 +53,7 @@
 	<!-- The in-game menu's Capture items save a screenshot or a clip to Photos, add-only: the app can put pictures there and cannot
 	     read the library (load/front_capture.m, PHAccessLevelAddOnly). -->
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Saves the screenshots and clips you take while playing to your photo library.</string>
+	<string>将你游玩时截取的截图和录屏保存到照片图库。</string>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
