@@ -53,14 +53,14 @@ public sealed partial class GameAppViewController
                 // identifier kills the app, hence the counter.
                 if (!BGTaskScheduler.Shared.Register(id, null, BackgroundStarted))
                 { Write("background: the system refused the task registration (is the identifier in Info.plist?)"); return; }
-                var title = "Building " + GameAppUi.DisplayName(game);
-                var request = new BGContinuedProcessingTaskRequest(id, title, "Starting")
+                var title = "正在构建 " + GameAppUi.DisplayName(game);
+                var request = new BGContinuedProcessingTaskRequest(id, title, "开始")
                 {
                     Strategy = BGContinuedProcessingTaskRequestSubmissionStrategy.Fail,
                 };
                 backgroundId = id;
                 backgroundDone = 0;
-                backgroundSubtitle = "Starting";
+                backgroundSubtitle = "开始";
                 BGTaskScheduler.Shared.Submit(request, error =>
                 {
                     if (error == null) return;
@@ -101,7 +101,7 @@ public sealed partial class GameAppViewController
             if (task == null) return;
             var done = Math.Max(backgroundDone, (long) (stage.Fraction * ProgressUnits));
             if (done != backgroundDone) { backgroundDone = done; task.Progress.CompletedUnitCount = done; }
-            var step = stage.Valid ? $"{stage.Step}/{stage.Of}: {stage.Text}" : (lastStage ?? "Starting");
+            var step = stage.Valid ? $"{stage.Step}/{stage.Of}: {stage.Text}" : (lastStage ?? "开始");
             if (step.Length > 80) step = step.Substring(0, 80);
             if (step != backgroundSubtitle)
             {
